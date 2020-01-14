@@ -268,7 +268,7 @@ const byte HPpins[HPCOUNT][2] = {{0,1},           // Front HP Pins
 ///*****               out frees up some system resources.                *****///
 ///*****                                                                  *****///
 //////////////////////////////////////////////////////////////////////////////////
-#define ENABLERC true
+//#define ENABLERC true
 
 #ifdef ENABLERC    //Do Not Edit This Line!
 //////////////////////////////////////////////////////////////////////////////////
@@ -301,7 +301,7 @@ const unsigned int RCRange[2] = {1250, 1750};     // {Min, Max}
 ///*****                                                                  *****///
 ///*****                 Adjust LED Brightness Level (0-255)              *****///
 //////////////////////////////////////////////////////////////////////////////////
-#define BRIGHT 100  // Set LED Brightness Level (0-255)
+#define BRIGHT 50//100  // Set LED Brightness Level (0-255)
 
 //////////////////////////////////////////////////////////////////////////////////
 ///*****         Enable/Disable LED Auto Twitch and Random Sequences      *****///
@@ -390,7 +390,7 @@ const unsigned int SERVO_SPEED[2] = {150, 400};
 ///*****   Uncomment the following if you wish to use this basic mode.    *****///
 ///*****                                                                  *****///
 //////////////////////////////////////////////////////////////////////////////////
-#define ENABLEBASICHP true                                   
+//#define ENABLEBASICHP true                                   
 
 
 #ifdef ENABLEBASICHP  //Do Not Edit This Line!
@@ -456,33 +456,35 @@ const unsigned int SERVO_SPEED[2] = {150, 400};
   ///*****                         for each of your HPs                     *****///
   ///*****                                                                  *****///
   //////////////////////////////////////////////////////////////////////////////////     
-  const PROGMEM uint16_t HPpos[HPCOUNT][HPPOSITIONS][2] = {{{1377,1706},   // Front HP Down
-                                                            {1477,1426},   // Front HP Center
-                                                            {1422,1161},   // Front HP Up
-                                                            {1611,1425},   // Front HP Left
-                                                            {1611,1155},   // Front HP Upper Left                                                          
-                                                            {1611,1739},   // Front HP Lower Left
-                                                            {1255,1434},   // Front HP Right 
-                                                            {1255,1115},   // Front HP Upper Right
-                                                            {1255,1729}},  // Front HP Lower Right
-                                                           {{1582,1330},   // Rear HP Down
-                                                            {1500,1512},   // Rear HP Center
-                                                            {1466,1773},   // Rear HP Up
-                                                            {1705,1598},   // Rear HP Left
-                                                            {1705,1797},   // Rear HP Upper Left
-                                                            {1705,1389},   // Rear HP Lower Left
-                                                            {1286,1460},   // Rear HP Right
-                                                            {1286,1602},   // Rear HP Upper Right
-                                                            {1285,1283}},  // Rear HP Lower Right
-                                                           {{1507,1208},   // Top HP Down
-                                                            {1501,1467},   // Top HP Center
-                                                            {1443,1680},   // Top HP Up
-                                                            {1624,1468},   // Top HP Left
-                                                            {1624,1667},   // Top HP Upper Left
-                                                            {1653,1272},   // Top HP Lower Left
-                                                            {1267,1468},   // Top HP Right
-                                                            {1258,1756},   // Top HP Upper Right
-                                                            {1395,1176}}}; // Top HP Lower right
+  const PROGMEM uint16_t HPpos[HPCOUNT][HPPOSITIONS][2] = {{{1850,1859},   // Front HP Down
+                                                            {1391,1664},   // Front HP Center
+                                                            {1076,1483},   // Front HP Up
+                                                            {1493,1507},   // Front HP Left
+                                                            {1054,1208},   // Front HP Upper Left                                                          
+                                                            {1836,1655},   // Front HP Lower Left
+                                                            {1421,1814},   // Front HP Right 
+                                                            {936,1686},   // Front HP Upper Right
+                                                            {1745,1916}},  // Front HP Lower Right
+                                                            
+                                                           {{1752,1391},   // Rear HP Down
+                                                            {1280,1384},   // Rear HP Center
+                                                            {872,1422},   // Rear HP Up
+                                                            {926,913},   // Rear HP Left
+                                                            {800,1103},   // Rear HP Upper Left
+                                                            {1426,1256},   // Rear HP Lower Left
+                                                            {1633,1644},   // Rear HP Right
+                                                            {1177,1564},   // Rear HP Upper Right
+                                                            {1800,1348}},  // Rear HP Lower Right
+                                                            
+                                                           {{1609,1550},   // Top HP Down
+                                                            {1341,1297},   // Top HP Center
+                                                            {1059,902},   // Top HP Up
+                                                            {1773,1279},   // Top HP Left
+                                                            {1467,1223},   // Top HP Upper Left
+                                                            {1727,1428},   // Top HP Lower Left
+                                                            {800,1278},   // Top HP Right
+                                                            {985,1109},   // Top HP Upper Right
+                                                            {1320,1458}}}; // Top HP Lower right
                     
 #endif  //Do Not Edit This Line! 
 
@@ -1535,5 +1537,4 @@ void i2cEvent(int howMany)
   stringComplete = true;                                // Once done, set a flag so the main loop can do something about it. 
   statusLEDOn();
 }
-
 
