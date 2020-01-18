@@ -29,7 +29,7 @@
 ///            colors for each HP;                                                                            ///
 ///                                                                                                           ///
 ///     v1.3 - Added ability to send sequence run time values via command string, cleaned up some             ///
-///            duplicate/unnecessary code, added 3 additional options for the HP designator values            ///
+///                                                                                                           //////            duplicate/unnecessary code, added 3 additional options for the HP designator values            ///
 ///            in command code (X,Y,Z see below), assign specific command strings to auto LED                 ///
 ///            twitch                                                                                         ///
 ///                                                                                                           ///
@@ -53,6 +53,8 @@
 ///      v1.7 - Bug fix identified by skelmir.  Thanks, for the input, my friend.                             ///
 ///                                                                                                           ///
 ///      v1.8 - Added the ability to set custom "Off Colors" per IOIIOOO's (Jason Cross) request              ///
+///                                                                                                           ///
+///      v1.9 - Added servo controls                                                                          ///
 ///                                                                                                           ///
 ///                                      Special thanks to...                                                 ///
 ///   LostRebel and Knightshade for significant input on both the general functions of the system             ///
@@ -145,6 +147,13 @@
 ///               Enables Off Color                                                                           ///
 ///       S9    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ random seqs.),          ///
 ///               Enables Off Color                                                                           ///
+///       S9    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ random seqs.),          ///
+///       S10   - Close All Dome Doors                                                                      ///
+///       S11   - Open All Dome Doors                                                                      ///
+///       S12   - Open Dome Pies                                                                              ///
+///       S13   - Close Dome Pies                                                                             ///
+///       S14   - Open Lower Dome Doors                                                                       ///
+///       S15   - Close Lower Dome Doors                                                                      ///
 ///                                                                                                           ///
 ///   * Function disabled or severely limited when Basic HP Positioning in enabled.                           /// 
 ///     I recomend using Preset Position Coordinates                                                          ///
@@ -789,7 +798,7 @@ void setup() {
 //////////////////////////////////////////////////////////////////////
 
 void loop(){
-  TurnOffServos
+  TurnOffServos();
   int commandLength;
     
   Servos::move(millis());  // this performs the actual moves
