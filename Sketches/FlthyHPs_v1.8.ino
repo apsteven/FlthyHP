@@ -172,6 +172,22 @@
 #define HPCOUNT 3
 #define HPPOSITIONS 9
 
+/////////////////////////////////////////////////////////////////
+Servos Dome(0x40);
+int PieDoorOpen[4] = {266, 242, 340, 292}; // open spots
+int PieDoorShut[4] = {458, 422, 530, 476}; // close spots
+int LDoorOpen[6] ={256, 268, 220, 230, 220, 220}; // open spots
+int LDoorShut[6] ={450, 470, 414, 450, 444, 220}; // close spots 
+int DelayTime=20;
+int DanceDelay = 600;
+boolean POff[4];
+boolean LOff[6];
+unsigned long PTimer[4];
+unsigned long LTimer[6];
+boolean PieDoorOpenCheck[4] = {false, false, false, false};
+boolean LDoorOpenCheck[6] = {false, false, false, false, false, false};
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                                                                                  ///
 ///                                  Start User Adjustable Settings                                  ///
@@ -755,6 +771,16 @@ void setup() {
   Serial.println(F("Starting Main Loop..."));
   Serial.println(F("Command Strings can now be entered in serial monitor...\n"));
   #endif
+    
+  //Close all of the lower dome doors
+  for(int i=0; i<6; i++) {
+    LShut(i);
+  }
+
+  //Close all of the dome pie doors
+  for(int i=0; i<6; i++) {
+    PieShut(i);
+  }
   
 }
 
@@ -763,6 +789,7 @@ void setup() {
 //////////////////////////////////////////////////////////////////////
 
 void loop(){
+  TurnOffServos
   int commandLength;
     
   Servos::move(millis());  // this performs the actual moves
@@ -1558,3 +1585,434 @@ void i2cEvent(int howMany)
   stringComplete = true;                                // Once done, set a flag so the main loop can do something about it. 
   statusLEDOn();
 }
+
+///////////////////////////////////////////////////////////////////////////
+//                          Dome Door Moves                              //
+///////////////////////////////////////////////////////////////////////////
+void HPDelay(int Time){   
+  div_t TimeResult;
+  TimeResult = div(Time, DelayTime);
+  Time = TimeResult.quot;
+  for(int Looper = 0; Looper <Time; Looper++){
+    TurnOffServos();   
+//    if(HPsOn == true){  
+//      if(timer == DelayFactor*HPTimes[HPTime]){
+//        RandomHPMove();
+//        HPTime = HPTime +1;
+//        if(HPTime == 15){
+//          HPTime = 0;
+//        }
+//      }
+//      timer = timer +1; 
+//      if(timer == DelayFactor*50){
+//        timer = 0;
+//      }
+//    }
+//    SetHPs(FrontHPStateDefault, RearHPStateDefault, TopHPStateDefault);
+    Servos::delay(DelayTime);
+  }
+}
+
+void TurnOffServos(){
+  for (int i=0; i <= 3; i++){
+    if((millis()>(PTimer[i]))&&(POff[i]==false)){
+      Dome.setPWM(i,0,0);
+      POff[i] = true;
+    }
+  }
+  for (int i=0; i <= 4; i++){  
+    if((millis()>(LTimer[i]))&&(LOff[i]==false)){
+      Dome.setPWM(i+4,0,0);
+      LOff[i] = true;
+    }
+  }
+}
+
+void AllOpenClose(){
+  if((PieDoorOpenCheck[0] == false) && (PieDoorOpenCheck[1] == false) && (PieDoorOpenCheck[2] == false) && (PieDoorOpenCheck[3] == false) && 
+    (LDoorOpenCheck[0] == false) && (LDoorOpenCheck[1] == false) && (LDoorOpenCheck[2] == false) && (LDoorOpenCheck[3] == false) && (LDoorOpenCheck[4] == false) && (LDoorOpenCheck[5] == false)){
+    LOpen(0);
+    LOpen(1);
+    LOpen(2);
+    LOpen(3);
+    LOpen(4);
+    LOpen(5);
+    PieOpen(0);
+    PieOpen(1);
+    PieOpen(2);
+    PieOpen(3);
+  } else {
+    LShut(0);
+    LShut(1);
+    LShut(2);
+    LShut(3);
+    LShut(4);
+    LOpen(5);
+    PieShut(0);
+    PieShut(1);
+    PieShut(2);
+    PieShut(3);
+  }
+}
+
+void AllOpenCloseSlow(int Time){
+  if((PieDoorOpenCheck[0] == false) && (PieDoorOpenCheck[1] == false) && (PieDoorOpenCheck[2] == false) && (PieDoorOpenCheck[3] == false) && 
+    (LDoorOpenCheck[0] == false) && (LDoorOpenCheck[1] == false) && (LDoorOpenCheck[2] == false) && (LDoorOpenCheck[3] == false) && (LDoorOpenCheck[4] == false) && (LDoorOpenCheck[5] == false)){
+    LOpenSlow(0, Time);
+    LOpenSlow(1, Time);
+    LOpenSlow(2, Time);
+    LOpenSlow(3, Time);
+    LOpenSlow(4, Time);
+    LOpenSlow(5, Time);
+    PieOpenSlow(0, Time);
+    PieOpenSlow(1, Time);
+    PieOpenSlow(2, Time);
+    PieOpenSlow(3, Time);
+  } else {
+    LShutSlow(0, Time);
+    LShutSlow(1, Time);
+    LShutSlow(2, Time);
+    LShutSlow(3, Time);
+    LShutSlow(4, Time);
+    LOpenSlow(5, Time);
+    PieShutSlow(0, Time);
+    PieShutSlow(1, Time);
+    PieShutSlow(2, Time);
+    PieShutSlow(3, Time);
+  }
+  HPDelay(Time);
+}
+
+void AllUpThenDown(int Time){
+  AllOpenClose();
+  HPDelay(Time);
+  AllOpenClose();
+}
+
+void Dance(){
+//  int LastHPsOn = HPsOn;
+//  if(HPsOn == true){
+//    HPsOn = false;
+//  }
+  LOpen(0);
+  LOpen(2);
+  LOpen(4);
+  PieOpen(0);
+  PieOpen(2);
+  LShut(1);
+  LShut(3);
+  PieShut(1);
+  PieShut(3);
+  HPDelay(DanceDelay);
+  LOpen(1);
+  LOpen(3);
+  PieOpen(1);
+  PieOpen(3);  
+  HPDelay(DanceDelay);
+  LShut(0);
+  LShut(2);
+  LShut(4);
+  PieShut(0);
+  PieShut(2);
+  HPDelay(DanceDelay);
+  LShut(1);
+  LShut(3);
+  PieShut(1);
+  PieShut(3);
+  HPDelay(DanceDelay);
+  LOpen(0);
+  LOpen(2);
+  LOpen(4);
+  PieOpen(0);
+  PieOpen(2);
+  HPDelay(DanceDelay);
+  LShut(0);
+  LShut(2);
+  LShut(4);
+  PieShut(0);
+  PieShut(2);
+  HPDelay(DanceDelay);
+  LOpen(1);
+  LOpen(3);
+  PieOpen(1);
+  PieOpen(3);  
+  HPDelay(DanceDelay);
+  LShut(1);
+  LShut(3);
+  PieShut(1);
+  PieShut(3);
+//  if(LastHPsOn == true){
+//    HPsOn = true;
+//  }
+}
+
+void StaggerUp(){
+//  int LastHPsOn = HPsOn;
+//  if(HPsOn == true){
+//    HPsOn = false;
+//  }
+  LOpen(0);
+  HPDelay(260);
+  LOpen(1);
+  HPDelay(260);
+  LOpen(2);
+  HPDelay(260);
+  LOpen(3);
+  HPDelay(260);
+  LOpen(4);
+  HPDelay(260);
+  PieOpen(0);
+  HPDelay(260);
+  PieOpen(1);
+  HPDelay(260);
+  PieOpen(2);
+  HPDelay(260);
+  PieOpen(3);
+  HPDelay(800);
+  PieShut(3);
+  HPDelay(260);
+  PieShut(2);
+  HPDelay(260);
+  PieShut(1);
+  HPDelay(260);
+  PieShut(0);
+  HPDelay(260);
+  LShut(4);
+  HPDelay(260);
+  LShut(3);
+  HPDelay(260);
+  LShut(2);
+  HPDelay(260);
+  LShut(1);
+  HPDelay(260);
+  LShut(0);
+//  if(LastHPsOn == true){
+//    HPsOn = true;
+//  }
+}
+
+void MexWaveSlow(int SSpeed){
+  LOpenSlow(0, SSpeed);
+  HPDelay(SSpeed/2);
+  LOpenSlow(1, SSpeed);
+  HPDelay(SSpeed/2);
+  LShutSlow(0, SSpeed);
+  LOpenSlow(2, SSpeed);
+  HPDelay(SSpeed/2);
+  LShutSlow(1, SSpeed);
+  LOpenSlow(3, SSpeed);
+  HPDelay(SSpeed/2);
+  LShutSlow(2, SSpeed);
+  LOpenSlow(4, SSpeed);
+  HPDelay(SSpeed/2);
+  LShutSlow(3, SSpeed);
+  PieOpenSlow(0, SSpeed);
+  HPDelay(SSpeed/2);
+  LShutSlow(4, SSpeed);
+  PieOpenSlow(1, SSpeed);
+  HPDelay(SSpeed/2);
+  PieShutSlow(0, SSpeed);
+  PieOpenSlow(2, SSpeed);
+  HPDelay(SSpeed/2);
+  PieShutSlow(1, SSpeed);
+  PieOpenSlow(3, SSpeed);
+  HPDelay(SSpeed/2);
+  PieShutSlow(2, SSpeed);
+  HPDelay(SSpeed/2);
+  PieShutSlow(3, SSpeed);
+  HPDelay(SSpeed);
+}
+
+void RippleAnti(int Time){
+//  int LastHPsOn = HPsOn;
+//  if(HPsOn == true){
+//    HPsOn = false;
+//  }
+  LOpen(0);
+  HPDelay(Time);
+  LShut(0);
+  LOpen(1);
+  HPDelay(Time);
+  LShut(1);
+  LOpen(2);
+  HPDelay(Time);
+  LShut(2);
+  LOpen(3);
+  HPDelay(Time);
+  LShut(3);
+  LOpen(4);
+  HPDelay(Time);
+  LShut(4);
+  Servos::delay(200);
+  PieOpen(0);
+  HPDelay(Time);
+  PieShut(0);
+  PieOpen(1);
+  HPDelay(Time);
+  PieShut(1);
+  PieOpen(2);
+  HPDelay(Time);
+  PieShut(2);
+  PieOpen(3);
+  HPDelay(Time);
+  PieShut(3);
+//  if(LastHPsOn == true){
+//    HPsOn = true;
+//  }
+}
+
+void RippleClock(int Time){
+//  int LastHPsOn = HPsOn;
+//  if(HPsOn == true){
+//    HPsOn = false;
+//  }
+  LOpen(4);
+  HPDelay(Time);
+  LShut(4);
+  LOpen(3);
+  HPDelay(Time);
+  LShut(3);
+  LOpen(2);
+  HPDelay(Time);
+  LShut(2);
+  LOpen(1);
+  HPDelay(Time);
+  LShut(1);
+  LOpen(0);
+  HPDelay(Time);
+  LShut(0);
+  Servos::delay(300);
+  PieOpen(3);
+  HPDelay(Time);
+  PieShut(3);
+  PieOpen(2);
+  HPDelay(Time);
+  PieShut(2);
+  PieOpen(1);
+  HPDelay(Time);
+  PieShut(1);
+  PieOpen(0);
+  HPDelay(Time);
+  PieShut(0);
+//  if(LastHPsOn == true){
+//    HPsOn = true;
+//  }
+}
+
+///////////////////////////////////////////////////////////////////////////
+//                        Dome Pie Door Moves                            //
+///////////////////////////////////////////////////////////////////////////
+void PieOpen(int No){  //  No is 0, 1, 2 or 3 
+  Dome.moveTo(No, 0, PieDoorOpen[No], PieDoorOpen[No]);
+  PieDoorOpenCheck[No] = true;
+  PTimer[No] = millis()+700;
+  POff[No] = false;
+}
+
+void PieShut(int No){
+  Dome.moveTo(No, 0, PieDoorShut[No], PieDoorShut[No]);
+  PieDoorOpenCheck[No] = false;
+  PTimer[No] = millis()+700;
+  POff[No] = false;
+}
+
+void PieOpenShut(int No){
+  if(PieDoorOpenCheck[No] == false){
+    PieOpen(No);
+  } else {
+    PieShut(No);
+  }
+}
+
+void PiePartOpen(int No){  //  No is 0, 1, 2 or 3
+  int PieTempPos = ((2*(PieDoorShut[No]-PieDoorOpen[No]))/5)+PieDoorOpen[No];
+  Dome.moveTo(No+4, 0, PieTempPos, PieTempPos);
+  PieDoorOpenCheck[No] = true;
+  PTimer[No] = millis()+500;
+  POff[No] = false;
+}
+
+void PieOpenSlow(int No, int Dur){
+  Dome.moveTo(No, Dur, PieDoorShut[No], PieDoorOpen[No]);
+  PieDoorOpenCheck[No] = true;
+  PTimer[No] = millis()+Dur+100;
+  POff[No] = false;
+}
+
+void PieShutSlow(int No, int Dur){
+  Dome.moveTo(No+4, Dur, PieDoorOpen[No], PieDoorShut[No]);
+  PieDoorOpenCheck[No] = false;
+  PTimer[No] = millis()+Dur+100;
+  POff[No] = false;
+}
+
+void PieOpenClose(){
+  if((PieDoorOpenCheck[0] == false) && (PieDoorOpenCheck[1] == false) && (PieDoorOpenCheck[2] == false) && (PieDoorOpenCheck[3] == false)){
+    PieOpen(0);
+    PieOpen(1);
+    PieOpen(2);
+    PieOpen(3);
+  } else {
+    PieShut(0);
+    PieShut(1);
+    PieShut(2);
+    PieShut(3);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////
+//                       Dome Lower Door Moves                           //
+///////////////////////////////////////////////////////////////////////////
+void LOpen(int No){  //  No is 4, 5, 6, 7, 8 or 9 (so add 4 to No for servo)
+  Dome.moveTo(No+4, 0, LDoorOpen[No], LDoorOpen[No]);
+  LDoorOpenCheck[No] = true;
+  LTimer[No] = millis()+600;
+  LOff[No] = false;
+}
+
+void LShut(int No){    
+  Dome.moveTo(No+4, 0, LDoorShut[No], LDoorShut[No]);
+  LDoorOpenCheck[No] = false;
+  LTimer[No] = millis()+600;  
+  LOff[No] = false;
+}
+
+void LOpenShut(int No){
+  if(LDoorOpenCheck[No] == false){
+    LOpen(No);
+  } else {
+    LShut(No);
+  }
+}
+
+void LOpenSlow(int No, int Dur){
+  Dome.moveTo(No+4, Dur, LDoorShut[No], LDoorOpen[No]);
+  LDoorOpenCheck[No] = true;
+  LTimer[No] = millis()+Dur+100;
+  LOff[No] = false;
+}
+
+void LShutSlow(int No, int Dur){    
+  Dome.moveTo(No+4, Dur, LDoorOpen[No], LDoorShut[No]);
+  LDoorOpenCheck[No] = false;
+  LTimer[No] = millis()+Dur+100;
+  LOff[No] = false;
+}
+
+void LowerOpenClose(){
+  if((LDoorOpenCheck[0] == false) && (LDoorOpenCheck[1] == false) && (LDoorOpenCheck[2] == false) && (LDoorOpenCheck[3] == false) && (LDoorOpenCheck[4] == false) && (LDoorOpenCheck[5] == false)){
+    LOpen(0);
+    LOpen(1);
+    LOpen(2);
+    LOpen(3);
+    LOpen(4);
+    LOpen(5);
+    } else {
+    LShut(0);
+    LShut(1);
+    LShut(2);
+    LShut(3);
+    LShut(4);
+    LShut(5);
+  }
+}  
