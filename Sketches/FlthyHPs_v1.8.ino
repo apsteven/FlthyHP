@@ -138,7 +138,7 @@
 ///       S4    - Clear all LEDs, Disable Auto HP Twitch, Disable Auto LED Sequence, Disables Off Color       ///
 ///       S5    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ default seqs.),         ///
 ///               Disables Off Color                                                                          ///
-///       S9    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ random seqs.),          ///
+///       S6    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ random seqs.),          ///
 ///               Disables Off Color                                                                          ///
 ///       S7    - Clear all LEDs, Disable Auto HP Twitch, Disable Auto LED Sequence, Enables Off Color        ///
 ///       S8    - Clear all LEDs, Enable Auto HP Twitch, Enable Auto LED Sequence (w/ default seqs.),         ///
@@ -345,13 +345,13 @@ boolean enableTwitchHP[HPCOUNT]   = {true,true,true};  // Leds:   Front, Rear, T
 ///*****                                                                   *****///
 ///////////////////////////////////////////////////////////////////////////////////  
     
-const unsigned int LEDTwitchInterval[HPCOUNT][2] = {{45,180},            // (45secs-3mins) Enter min and max seconds Front HP Led Twitches  
-                                                    {45,180},            // (45secs-3mins) Enter min and max seconds Rear HP Led Twitches 
-                                                    {45,180}};           // (45secs-3mins) Enter min and max seconds Top HP Led Twitches    
+const unsigned int LEDTwitchInterval[HPCOUNT][2] = {{45,120},            // (45secs-3mins) Enter min and max seconds Front  es  
+                                                    {45,120},            // (45secs-3mins) Enter min and max seconds Rear HP Led Twitches 
+                                                    {45,120}};           // (45secs-3mins) Enter min and max seconds Top HP Led Twitches    
     
-const unsigned int HPTwitchInterval[HPCOUNT][2] = {{45,120},             // (45s-2mins) Enter min and max seconds Front HP Servo Twitches  
-                                                   {60,180},             // (1min-3mins) Enter min and max seconds Rear HP Servo Twitches
-                                                   {60,180}};            // (1min-3mins) Enter min and max seconds Top HP Servo Twitches  
+const unsigned int HPTwitchInterval[HPCOUNT][2] = {{30,85},             // (45s-2mins) Enter min and max seconds Front HP Servo Twitches  
+                                                   {45,120},             // (1min-3mins) Enter min and max seconds Rear HP Servo Twitches
+                                                   {45,120}};            // (1min-3mins) Enter min and max seconds Top HP Servo Twitches  
 
 ///////////////////////////////////////////////////////////////////////////////////
 ///*****                  LED Auto Twitch Run Time Ranges                  *****///
@@ -456,35 +456,35 @@ const unsigned int SERVO_SPEED[2] = {150, 400};
   ///*****                         for each of your HPs                     *****///
   ///*****                                                                  *****///
   //////////////////////////////////////////////////////////////////////////////////     
-  const PROGMEM uint16_t HPpos[HPCOUNT][HPPOSITIONS][2] = {{{1850,1859},   // Front HP Down
-                                                            {1391,1664},   // Front HP Center
-                                                            {1076,1483},   // Front HP Up
-                                                            {1493,1507},   // Front HP Left
-                                                            {1054,1208},   // Front HP Upper Left                                                          
-                                                            {1836,1655},   // Front HP Lower Left
-                                                            {1421,1814},   // Front HP Right 
-                                                            {936,1686},   // Front HP Upper Right
-                                                            {1745,1916}},  // Front HP Lower Right
+   const PROGMEM uint16_t HPpos[HPCOUNT][HPPOSITIONS][2] = {{{400,410},   // Front HP Down
+                                                            {340,400},   // Front HP Center
+                                                            {250,350},   // Front HP Up
+                                                            {350,350},   // Front HP Left
+                                                            {240,300},   // Front HP Upper Left                                                          
+                                                            {425,390},   // Front HP Lower Left
+                                                            {350,430},   // Front HP Right 
+                                                            {210,400},   // Front HP Upper Right
+                                                            {425,435}},  // Front HP Lower Right
                                                             
-                                                           {{1752,1391},   // Rear HP Down
-                                                            {1280,1384},   // Rear HP Center
-                                                            {872,1422},   // Rear HP Up
-                                                            {926,913},   // Rear HP Left
-                                                            {800,1103},   // Rear HP Upper Left
-                                                            {1426,1256},   // Rear HP Lower Left
-                                                            {1633,1644},   // Rear HP Right
-                                                            {1177,1564},   // Rear HP Upper Right
-                                                            {1800,1348}},  // Rear HP Lower Right
+                                                           {{390,330},   // Rear HP Down
+                                                            {320,360},   // Rear HP Center
+                                                            {150,340},   // Rear HP Up
+                                                            {270,270},   // Rear HP Left
+                                                            {270,270},   // Rear HP Upper Left
+                                                            {390,330},   // Rear HP Lower Left
+                                                            {390,390},   // Rear HP Right
+                                                            {150,340},   // Rear HP Upper Right
+                                                            {390,390}},  // Rear HP Lower Right
                                                             
-                                                           {{1609,1550},   // Top HP Down
-                                                            {1341,1297},   // Top HP Center
-                                                            {1059,902},   // Top HP Up
-                                                            {1773,1279},   // Top HP Left
-                                                            {1467,1223},   // Top HP Upper Left
-                                                            {1727,1428},   // Top HP Lower Left
-                                                            {800,1278},   // Top HP Right
-                                                            {985,1109},   // Top HP Upper Right
-                                                            {1320,1458}}}; // Top HP Lower right
+                                                           {{250,300},   // Top HP Down
+                                                            {320,320},   // Top HP Center
+                                                            {400,340},   // Top HP Up
+                                                            {320,340},   // Top HP Left
+                                                            {390,380},   // Top HP Upper Left
+                                                            {200,320},   // Top HP Lower Left
+                                                            {320,290},   // Top HP Right
+                                                            {410,300},   // Top HP Upper Right
+                                                            {240,190}}}; // Top HP Lower right
                     
 #endif  //Do Not Edit This Line! 
 
@@ -847,57 +847,57 @@ void loop(){
                        break;
 
                case 4: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=false;                                 // Disables Auto HP Twith on all HPs 
-                                offcoloroverride[i] = true;                               // Overrides any set "Off Color" so LEDs are truely Off
+                                enableTwitchHP[i]=false;                                 // Disables Auto HP Twitch on all HPs 
+                                offcoloroverride[i] = true;                              // Overrides any set "Off Color" so LEDs are truely Off
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=0;                                    // Disables Auto LED Twith on all HPs
+                                enableTwitchLED[i]=0;                                    // Disables Auto LED Twitch on all HPs
                        }
                        break;
                case 5: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twith on all HPs 
-                                offcoloroverride[i] = true;                               // Overrides any set "Off Color" so LEDs are truely Off
+                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twitch on all HPs 
+                                offcoloroverride[i] = true;                              // Overrides any set "Off Color" so LEDs are truely Off
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=1;                                    // Enables Auto LED Twith on all HPs using assigned default sequences
+                                enableTwitchLED[i]=1;                                    // Enables Auto LED Twitch on all HPs using assigned default sequences
                        }
                        break;
                case 6: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twith on all HPs 
-                                offcoloroverride[i] = true;                               // Overrides any set "Off Color" so LEDs are truely Off
+                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twitch on all HPs 
+                                offcoloroverride[i] = true;                              // Overrides any set "Off Color" so LEDs are truely Off
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=2;                                    // Enables Auto LED Twith on all HPs using random sequences
+                                enableTwitchLED[i]=2;                                    // Enables Auto LED Twitch on all HPs using random sequences
                        }
                        break;
                case 7: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=false;                                 // Disables Auto HP Twith on all HPs 
-                                offcoloroverride[i] = false;                              // Removes Any Override to "Off Color" if set
+                                enableTwitchHP[i]=false;                                 // Disables Auto HP Twitch on all HPs 
+                                offcoloroverride[i] = false;                             // Removes Any Override to "Off Color" if set
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=0;                                    // Disables Auto LED Twith on all HPs
+                                enableTwitchLED[i]=0;                                    // Disables Auto LED Twitch on all HPs
                        }
                        break;
                case 8: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twith on all HPs 
-                                offcoloroverride[i] = false;                              // Removes Any Override to "Off Color" if set
+                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twitch on all HPs 
+                                offcoloroverride[i] = false;                             // Removes Any Override to "Off Color" if set
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=1;                                    // Enables Auto LED Twith on all HPs using assigned default sequences
+                                enableTwitchLED[i]=1;                                    // Enables Auto LED Twitch on all HPs using assigned default sequences
                        }
                        break;
                 case 9: for (int i=0; i<HPCOUNT; i++) {
-                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twith on all HPs
-                                offcoloroverride[i] = false;                              // Removes Any Override to "Off Color" if set 
+                                enableTwitchHP[i]=true;                                  // Enables Auto HP Twitch on all HPs
+                                offcoloroverride[i] = false;                             // Removes Any Override to "Off Color" if set 
                                 flushCommandArray(i, 0);                                 // Flushes LED Command Array for all HPs
                                 flushCommandArray(i, 1);                                 // Flushes HP Command Array for all HPs
                                 ledOFF(i);                                               // Turns Off LEDs on all HPs
-                                enableTwitchLED[i]=2;                                    // Enables Auto LED Twith on all HPs using random sequences
+                                enableTwitchLED[i]=2;                                    // Enables Auto LED Twitch on all HPs using random sequences
                        }
                        break;
                 default: break;
@@ -1024,7 +1024,7 @@ int mapPulselength(double microseconds) {
   // resulting in a more actuate map
   double pulselength = 4.521;  // (1000000/(60.00*0.9))/4096
   int pulse;
-  pulse = microseconds/pulselength;
+  pulse = microseconds;//pulselength;
   return pulse;
 }
 
@@ -1086,6 +1086,27 @@ void positionHP(byte hp, byte pos, int speed) {
     servos.moveTo(HPpins[hp][0],speed,pos1);
     servos.moveTo(HPpins[hp][1],speed,pos2);
     #ifdef DEBUG
+    //ssloan
+      Serial.print("1st Position ");
+      Serial.print("servos.moveTo(");
+      Serial.print(HPpins[hp][0],DEC);
+      Serial.print(",");
+      Serial.print(speed,DEC);
+      Serial.print(",");
+      Serial.print(pos1,DEC);
+      Serial.print(")");
+      Serial.println();
+
+      Serial.print("2nd Position ");
+      Serial.print("servos.moveTo(");
+      Serial.print(HPpins[hp][1],DEC);
+      Serial.print(",");
+      Serial.print(speed,DEC);
+      Serial.print(",");
+      Serial.print(pos2,DEC);
+      Serial.print(")");
+      Serial.println();
+      
       if(hp==0) {Serial.print(F("Front"));}
       else if(hp==1) {Serial.print(F("Rear"));}
       else if(hp==2) {Serial.print(F("Top"));}
@@ -1537,4 +1558,3 @@ void i2cEvent(int howMany)
   stringComplete = true;                                // Once done, set a flag so the main loop can do something about it. 
   statusLEDOn();
 }
-
