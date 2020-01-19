@@ -780,14 +780,24 @@ void setup() {
   Serial.println(F("Starting Main Loop..."));
   Serial.println(F("Command Strings can now be entered in serial monitor...\n"));
   #endif
-    
+
+  //Open all of the lower dome doors
+  for(int i=0; i<6; i++) {
+    LOpen(i);
+  }
+      
   //Close all of the lower dome doors
   for(int i=0; i<6; i++) {
     LShut(i);
   }
 
+  //Open all of the dome pie doors
+  for(int i=0; i<4; i++) {
+    PieOpen(i);
+  }
+
   //Close all of the dome pie doors
-  for(int i=0; i<6; i++) {
+  for(int i=0; i<4; i++) {
     PieShut(i);
   }
   
