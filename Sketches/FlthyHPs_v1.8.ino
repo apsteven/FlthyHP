@@ -183,10 +183,10 @@
 
 /////////////////////////////////////////////////////////////////
 Servos Dome(0x40);
-int PieDoorOpen[4] = {266, 242, 340, 292}; // open spots
-int PieDoorShut[4] = {458, 422, 530, 476}; // close spots
-int LDoorOpen[6] ={256, 268, 220, 230, 220, 220}; // open spots
-int LDoorShut[6] ={450, 470, 414, 450, 444, 220}; // close spots 
+int PieDoorOpen[4] = {422, 422, 423, 429}; // open spots
+int PieDoorShut[4] = {269, 269, 255, 274}; // close spots
+int LDoorOpen[6] ={411, 235, 399, 399, 376, 376}; // open spots
+int LDoorShut[6] ={258, 399, 235, 235, 235, 235}; // close spots 
 int DelayTime=20;
 int DanceDelay = 600;
 boolean POff[4];
